@@ -1,0 +1,14 @@
+# Jam Pembelian Kopi
+
+SELECT
+    st.order_session_id, 
+    SUM(srl.item_qty) AS total_item_qty,
+    MAX(st.order_session_created_at) AS max_order_session_created_at
+FROM sales.summary_transaction st
+LEFT JOIN sales.summary_report_lines srl ON st.order_session_id = srl.order_session_id
+LEFT JOIN product.store_branch sb ON st.store_branch_id = sb.id
+LEFT JOIN product.store s ON sb.store_id = s.id
+WHERE s."name" = 'Bento Kopi'
+    AND srl.category_name LIKE 'Coffee%'
+    AND st.order_session_created_at BETWEEN '2022-01-01' AND '2022-12-31'
+GROUP BY st.order_session_id;
