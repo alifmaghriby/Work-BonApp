@@ -1,0 +1,26 @@
+# Collect Date of Birth Customers
+
+SELECT DATE_TRUNC(‘year', u.birth_date) y,
+	COUNT(u.id) 
+FROM "identity"."user" u
+LEFT JOIN product.store_branch sb ON sb.id = u.id 
+LEFT JOIN product.store s ON s.id = sb.store_id 
+WHERE u.role_id = 8
+GROUP BY y 
+ORDER BY COUNT DESC;
+
+# ROLE AGE
+
+SELECT EXTRACT(YEAR FROM AGE('2023-01-01'::DATE, u.birth_date)) AS umur
+FROM 
+    orders.b2c_order bco
+JOIN 
+    identity.user u ON u.first_name = bco.customer_name
+JOIN 
+    product.store_branch sb ON sb.id = bco.store_branch_id
+JOIN 
+    product.store s ON s.id = sb.store_id
+WHERE 
+    u.role_id = 7
+    AND sb."name" = 'Easy Breezy Malang'
+    AND u.birth_date IS NOT NULL;
