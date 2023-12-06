@@ -1,3 +1,5 @@
+# All Merchants
+
 SELECT 
     st.*,
     s."name" as store_name,
@@ -24,4 +26,31 @@ LEFT JOIN product.store s ON s.id = sb.store_id
 LEFT JOIN orders.b2c_order b2co ON st.order_session_id = b2co.order_session_id
 WHERE s.is_sandbox = false 
   AND st.order_session_created_at BETWEEN '2023-01-01 00:00:00' AND '2023-10-30 23:59:59'
+ORDER BY st.order_session_created_at DESC;
+
+# One Merchant
+
+SELECT DISTINCT
+    sb."name" AS store_branch_name,
+    st.order_session_id AS order_id,
+    st.order_session_created_at AS order_created,
+    st.order_type,
+    st.order_session_status_name AS order_status,
+    b2co.customer_name,
+    st.total_item,
+    st.subtotal,
+    st.discount,
+    st.service_charge,
+    st.order_fee,
+    st.pb1,
+    st.delivery_fee,
+    st.rounding_amoun
+    st.grand_total,
+    st.payment_method_name 
+FROM sales.summary_transaction st
+LEFT JOIN product.store_branch sb ON st.store_branch_id = sb.id
+LEFT JOIN product.store s ON sb.store_id = s.id
+LEFT JOIN orders.b2c_order b2co ON st.order_session_id = b2co.order_session_id
+WHERE sb."name" LIKE 'Kaktus%'
+    AND st.order_session_created_at BETWEEN '2023-08-01 00:00:00' AND '2023-08-31 23:59:59'
 ORDER BY st.order_session_created_at DESC;
