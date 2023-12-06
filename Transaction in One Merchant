@@ -1,0 +1,12 @@
+SELECT 
+    st.order_session_id,
+    st.order_session_created_at 
+FROM 
+    sales.summary_transaction st 
+LEFT JOIN 
+    product.store_branch sb ON st.store_branch_id = sb.id 
+LEFT JOIN 
+    product.store s ON sb.store_id = s.id 
+WHERE 
+    sb."name" = 'Warunk Genji Jogja' 
+    AND st.order_session_created_at BETWEEN '2023-11-04 19:00:00' AND '2023-11-04 20:00:00';
