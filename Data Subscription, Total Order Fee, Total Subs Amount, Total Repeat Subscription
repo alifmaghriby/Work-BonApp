@@ -1,0 +1,28 @@
+SELECT q1.name,
+       q1.total_order_fee_amount,
+       q2.total_subscription_amount,
+       q1.total_success_order,
+       q2.total_repitition_subscribing
+FROM (
+    SELECT sb.name,
+           sb.id,
+           SUM(os.order_fee) AS total_order_fee_amount,
+           COUNT(*) AS total_success_order
+    FROM sales.summary_transaction os
+    LEFT JOIN product.store_branch sb ON sb.id = os.store_branch_id
+    LEFT JOIN product.store s ON s.id = sb.store_id
+    WHERE s.is_sandbox = FALSE
+      AND os.order_session_status_name IN ('Delivered', 'Paid off')
+    GROUP BY sb.name, sb.id
+) q1
+LEFT JOIN (
+    SELECT sb.name,
+           sb.id,
+           SUM(pp.normal_price) AS total_subscription_amount,
+           COUNT(*) AS total_repitition_subscribing
+    FROM subscription.subscription s
+    LEFT JOIN product.store_branch sb ON sb.id = s.store_branch_id
+    LEFT JOIN product.store st ON st.id = sb.store_id
+    LEFT JOIN subscription.plan_price pp ON pp.id = s.plan_price_id
+    GROUP BY sb.name, sb.id
+) q2 ON q2.id = q1.id
