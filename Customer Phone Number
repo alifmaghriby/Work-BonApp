@@ -1,0 +1,35 @@
+# Role ID Information
+
+Role ID:
+2	Admin
+6	Server
+9	Admin Store
+1	Super Admin
+8	Customer
+4	Waitress
+3	Business Owner
+7	Cashier
+5	Kitchen
+
+# One Merchant
+
+SELECT 
+    u.primary_phone,
+    sb.name AS store_branch_name
+FROM 
+    identity.user u
+LEFT JOIN 
+    product.store_branch sb
+ON 
+    u.is_active = sb.is_active
+WHERE 
+    u.role_id = 8
+AND 
+    sb.name LIKE 'Bento%';
+
+# All Merchants
+
+SELECT 
+	u.primary_phone
+FROM identity.user u 
+WHERE u.role_id = 8;
