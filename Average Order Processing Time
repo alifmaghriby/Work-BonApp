@@ -1,0 +1,6 @@
+SELECT AVG(EXTRACT(MINUTE FROM st.updated_at - st.created_at)) AS rata_rata_waktu_pesan_selesai
+FROM sales.summary_transaction st
+LEFT JOIN product.store_branch sb ON st.store_branch_id = sb.id
+LEFT JOIN product.store s ON sb.store_id = s.id
+WHERE s.is_sandbox = false
+AND st.created_at BETWEEN '2023-08-01 00:00:00' AND '2023-08-31 23:59:59';
