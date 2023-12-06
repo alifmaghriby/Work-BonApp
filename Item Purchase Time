@@ -12,3 +12,15 @@ WHERE s."name" = 'Bento Kopi'
     AND srl.category_name LIKE 'Coffee%'
     AND st.order_session_created_at BETWEEN '2022-01-01' AND '2022-12-31'
 GROUP BY st.order_session_id;
+
+# Jam Pembelian Makanan (Untuk dibuat Line Chart)
+
+SELECT 
+    EXTRACT(HOUR FROM srl.order_session_created_at) AS order_hour,
+    SUM(srl.item_qty) AS total_item_qty
+FROM sales.summary_report_lines srl 
+LEFT JOIN product.store_branch sb ON srl.store_branch_id = sb.id 
+WHERE srl.item_name = 'Snack Plater'
+    AND srl.order_session_created_at BETWEEN '2023-08-01 00:00:00' AND '2023-08-31 23:59:59'
+GROUP BY order_hour
+ORDER BY order_hour asc;
