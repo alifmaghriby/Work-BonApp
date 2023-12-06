@@ -1,0 +1,128 @@
+# Counting 
+
+SELECT COUNT(bco.id)
+FROM sales.summary_transaction st
+LEFT JOIN product.store_branch sb ON st.store_branch_id = sb.id
+LEFT JOIN product.store s ON sb.store_id = s.id
+LEFT JOIN orders.b2c_order bco ON st.order_session_id = bco.order_session_id
+WHERE s.is_sandbox = false
+  AND st.created_at BETWEEN ‘2023-04-01 00:00:00’ AND ‘2023-06-30 23:59:59’;
+
+# Breakdown User per Date
+
+SELECT
+	bco.id,
+	st.created_at
+FROM sales.summary_transaction st
+LEFT JOIN product.store_branch sb ON st.store_branch_id = sb.id
+LEFT JOIN product.store s ON sb.store_id = s.id
+LEFT JOIN orders.b2c_order bco ON st.order_session_id = bco.order_session_id
+WHERE s.is_sandbox = false
+  AND st.created_at BETWEEN ‘2023-04-01 00:00:00’ AND ‘2023-06-30 23:59:59’;
+
+# Jumlah User COS
+
+SELECT COUNT(q1.fullname) 
+FROM (
+    SELECT
+        CONCAT(u.first_name, ' ', u.last_name) AS fullname,
+        u.primary_phone AS primary_phone_number
+    FROM 
+        orders.b2c_order bco
+    JOIN 
+        identity.user u ON u.first_name = bco.customer_name
+    JOIN 
+        product.store_branch sb ON sb.id = bco.store_branch_id
+    JOIN 
+        product.store s ON s.id = sb.store_id
+    WHERE 
+        u.role_id = 8
+        AND s.is_sandbox = false
+        AND LENGTH(u.primary_phone) <= 16
+        AND sb."name" LIKE 'Aluna%'
+        OR sb."name" LIKE 'Amna%'
+        OR sb."name" LIKE 'Aneka%'
+        OR sb."name" LIKE 'AYMNESIA%'
+       	OR sb."name" like 'Bakmi Ayam Abadi Sunter%'
+       	OR sb."name" like 'Bakmi Gang Kelinci%'
+       	OR sb."name" like 'Bakmi Gang Kelinci Bungur%'
+       	OR sb."name" like 'Bakmie Jogja Zalfa%'
+       	OR sb."name" like 'Balboni Pizza Alam Sutera%'
+       	OR sb."name" like 'Bento Kopi Concat%'
+       	OR sb."name" like 'Bento Kopi Godean%'
+       	OR sb."name" like 'Bento Kopi Jakal%'
+       	OR sb."name" like 'Bento Kopi JCM%'
+       	OR sb."name" like 'Bento Kopi Klebengan%'
+       	OR sb."name" like 'Bento Kopi Maguwoharjo%'
+       	OR sb."name" like 'Bento Kopi Nologaten'
+       	OR sb."name" like 'Bento Kopi Sorowajan%'
+       	OR sb."name" like 'Bento Kopi UAD%'
+       	OR sb."name" like 'Bento Kopi UMY%'
+       	OR sb."name" like 'Burger Que%'
+       	OR sb."name" like 'Byodo Coffee%'
+       	OR sb."name" like 'Chante%'
+       	OR sb."name" like 'Cliffton Ice%'
+       	OR sb."name" like 'CR All the sweetness in you%'
+       	OR sb."name" like 'Cupba%'
+       	OR sb."name" like 'Dapur Aisyah%'
+       	OR sb."name" like 'Dapur Ibu Fatih%'
+       	OR sb."name" like 'Dapur Mamada%'
+       	OR sb."name" like 'Dapur Nayara%'
+       	OR sb."name" like 'Dapur Umay%'
+       	OR sb."name" like 'Djowo Klaten%'
+       	OR sb."name" like 'Dogs Ministry%'
+       	OR sb."name" like 'Dwi Purwati Collection%'
+       	OR sb."name" like 'Easy Breezy%'
+       	OR sb."name" like 'Easy Breezy Malang%'
+       	OR sb."name" like 'Eleven Ground%'
+       	OR sb."name" like 'Es Dalgona Dewan%'
+       	OR sb."name" like 'Ganaga ST Garage%'
+       	OR sb."name" like 'Gurita Kurma%'
+       	OR sb."name" like 'Hayyu Umroh%'
+       	OR sb."name" like 'Jenggleng Cafe Bar & Resto%'
+       	OR sb."name" like 'Kafe Rute 15%'
+       	OR sb."name" like 'Kaktus Coffee%'
+       	OR sb."name" like 'Kaktus Coffee Place%'
+       	OR sb."name" like 'Kantin Nusantara Ibu Uci%'
+       	OR sb."name" like 'Kopi Dari Hati Duren Tiga%'
+       	OR sb."name" like 'Kopi Kren #007%'
+       	OR sb."name" like 'Kopikuni%'
+       	OR sb."name" like 'KOPI MACHO%'
+       	OR sb."name" like 'Kopi Ula%'
+       	OR sb."name" like 'Link.up cafe%'
+       	OR sb."name" like 'Lupba Cafe%'
+       	OR sb."name" like 'Martabak Moscow%'
+       	OR sb."name" like 'MENTAI NI%'
+       	OR sb."name" like 'Mie Nantang%'
+       	OR sb."name" like 'Mimume%'
+       	OR sb."name" like 'Miracle.Recipee%'
+       	OR sb."name" like 'Mood River Garden%'
+       	OR sb."name" like 'MY.Kan Cafe & Resto%'
+       	OR sb."name" like 'Nasi Bali Nusantara Kajeto%'
+       	OR sb."name" like 'Noma Cafe All Day Night%'
+       	OR sb."name" like 'Odeng Coffee%'
+       	OR sb."name" like 'Omah Bakso Jenggleng%'
+       	OR sb."name" like 'Pawon Canarra%'
+       	OR sb."name" like 'Pawon Mbok Laris%'
+       	OR sb."name" like 'Pentol Oye Bandung%'
+       	OR sb."name" like 'Prego Restaurant%'
+       	OR sb."name" like 'Puding Kelapa Sultan%'
+       	OR sb."name" like 'Purple House Mama Al%'
+       	OR sb."name" like 'Raminten3 Resto%'
+       	OR sb."name" like 'Rashya Foods By Devy$'
+       	OR sb."name" like 'Room Service HDTI%'
+       	OR sb."name" like 'Rumah Pepes Muslim%'
+       	OR sb."name" like 'Shava Coffee%'
+       	OR sb."name" like 'Sobat Mentai%'
+       	OR sb."name" like 'Spesial Nasi Campur Bali%'
+       	OR sb."name" like 'Station Kupi%'
+       	OR sb."name" like 'Steki%'
+       	OR sb."name" like 'Teleskopikafe%'
+       	OR sb."name" like 'Warung Rafa%'
+       	OR sb."name" like 'Warunk Genji%'
+       	OR sb."name" like 'Winata Jaya Cafe%'
+       	OR sb."name" like 'Winata Jaya Printing%'
+       	OR sb."name" like 'Yolk Kitchen%'
+       	OR sb."name" like 'Zizi Pizzeria & Coffee%'
+    AND u.created_at BETWEEN '2023-01-01 00:00:00' AND '2023-11-30 23:59:59'
+) q1;
