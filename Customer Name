@@ -1,0 +1,14 @@
+SELECT 
+    b2co.customer_name,
+    u.primary_phone,
+    b2co.subtotal,
+    sb.name AS store_branch_name
+FROM 
+    identity.user AS u
+LEFT JOIN 
+    product.store_branch AS sb ON u.is_active = sb.is_active
+LEFT JOIN 
+    orders.b2c_order AS b2co ON u.is_active = b2co.is_active
+WHERE 
+    u.role_id = 8
+    AND sb.name LIKE 'Bento%';
