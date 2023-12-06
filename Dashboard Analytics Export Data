@@ -1,0 +1,27 @@
+SELECT 
+    st.*,
+    s."name" as store_name,
+    sb."name" as store_branch_name,
+    sb.latitude,
+    sb.longitude,
+    sb.country,
+    sb.province,
+    sb.regency,
+    srl.item_name,
+    srl.item_qty,
+    srl.price_item,
+    srl.total_price_item,
+    srl.category_name,
+    b2co.id,
+    b2co.customer_name,
+    b2co.latitude as customer_latitude,
+    b2co.longitude as customer_longitude,
+    b2co.total
+FROM sales.summary_transaction st
+LEFT JOIN sales.summary_report_lines srl ON st.order_session_id = srl.order_session_id
+LEFT JOIN product.store_branch sb ON st.store_branch_id = sb.id
+LEFT JOIN product.store s ON s.id = sb.store_id
+LEFT JOIN orders.b2c_order b2co ON st.order_session_id = b2co.order_session_id
+WHERE s.is_sandbox = false 
+  AND st.order_session_created_at BETWEEN '2023-01-01 00:00:00' AND '2023-10-30 23:59:59'
+ORDER BY st.order_session_created_at DESC;
