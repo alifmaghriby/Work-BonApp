@@ -1,0 +1,22 @@
+# USING PYTHON
+
+import pandas as pd
+
+# Load the CSV file into a DataFrame
+data = pd.read_csv("Data_BonApp.csv")
+
+# Convert formatted_start_date and formatted_end_date to datetime objects
+data['formatted_start_date'] = pd.to_datetime(data['formatted_start_date'])
+data['formatted_end_date'] = pd.to_datetime(data['formatted_end_date'])
+
+# Extract quarter information
+data['quarter'] = data['formatted_start_date'].dt.to_period("Q")
+
+# Count the number of active merchants per quarter and plan
+active_merchants_per_plan_quarter = data.groupby(['quarter', 'plan'])['merchant'].nunique()
+
+# Calculate churn rate per quarter and plan as percentage
+churn_rate_per_plan_quarter = (1 - active_merchants_per_plan_quarter.groupby('plan').pct_change()) * 100
+
+# Print or save the results
+print(churn_rate_per_plan_quarter)
