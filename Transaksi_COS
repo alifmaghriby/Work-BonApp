@@ -1,0 +1,20 @@
+SELECT count(q1.id)
+FROM (
+    SELECT
+        os.id,
+        st.grand_total
+    FROM 
+        orders.order_session os
+    JOIN 
+      	identity.user u ON u.id= os.created_by
+    JOIN 
+        product.store_branch sb ON sb.id = os.store_branch_id
+    JOIN 
+    	sales.summary_transaction st ON st.order_session_id = os.id
+    WHERE 
+       	u.role_id = 8
+        AND sb.id = '644080f9-8c6b-4143-94f7-9b1c900da2bc'
+        AND os.order_session_status_alias in ('paid_off','delivered')
+        AND os.qr_type in ('dynamic','static')
+        and os.created_at BETWEEN '2023-10-01 00:00:00' AND '2023-10-31 23:59:59'
+) q1;
