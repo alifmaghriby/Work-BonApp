@@ -13,8 +13,8 @@ FROM (
     	sales.summary_transaction st ON st.order_session_id = os.id
     WHERE 
        	u.role_id = 8
-        AND sb.id = '644080f9-8c6b-4143-94f7-9b1c900da2bc'
+        AND sb.id = '8ee68861-0d88-4c78-a168-9998223d8871'
         AND os.order_session_status_alias in ('paid_off','delivered')
         AND os.qr_type in ('dynamic','static')
-        and os.created_at BETWEEN '2023-10-01 00:00:00' AND '2023-10-31 23:59:59'
+        and os.created_at BETWEEN '2023-12-01 00:00:00' AND '2023-12-31 23:59:59'
 ) q1;
